@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Marquee from './components/Marquee';
 import DashboardGrid from './components/DashboardGrid';
+import Footer from './components/Footer'; // Naya Footer Import Kiya
 import Login from './components/Login';
 import CustomCursor from './components/CustomCursor';
 import FloatingDock from './components/FloatingDock';
@@ -12,13 +13,9 @@ function App() {
   return (
     <div className="min-h-screen bg-black text-[#A3A3A3] font-sans selection:bg-white selection:text-black cursor-none relative">
       
-      {/* Magic Custom Cursor */}
       <CustomCursor />
-      
-      {/* Top Navbar */}
       <Navbar />
       
-      {/* Routes */}
       <Routes>
         <Route 
           path="/" 
@@ -27,6 +24,7 @@ function App() {
               <Hero />
               <Marquee />
               <DashboardGrid />
+              <Footer /> {/* Footer yahan cards ke theek neeche laga diya */}
             </>
           } 
         />
@@ -40,7 +38,6 @@ function App() {
         />
       </Routes>
 
-      {/* Floating Glass Dock */}
       <FloatingDock />
       
     </div>
