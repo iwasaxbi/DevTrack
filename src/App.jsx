@@ -4,18 +4,21 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import DashboardGrid from './components/DashboardGrid';
 import Login from './components/Login';
-import CustomCursor from './components/CustomCursor'; // Naya Cursor Import kiya
+import CustomCursor from './components/CustomCursor';
+import FloatingDock from './components/FloatingDock';
 
 function App() {
   return (
-    // 'cursor-none' class lagayi taaki purana mouse pointer gayab ho jaye
-    <div className="min-h-screen bg-black text-[#A3A3A3] font-sans selection:bg-white selection:text-black cursor-none">
+    // Global dark theme, text colors, aur custom cursor ke liye 'cursor-none'
+    <div className="min-h-screen bg-black text-[#A3A3A3] font-sans selection:bg-white selection:text-black cursor-none relative">
       
-      {/* Naya Magic Cursor */}
+      {/* 1. Magic Custom Cursor */}
       <CustomCursor />
       
+      {/* 2. Top Minimalist Navbar */}
       <Navbar />
       
+      {/* 3. Page Routes */}
       <Routes>
         <Route 
           path="/" 
@@ -35,6 +38,10 @@ function App() {
           } 
         />
       </Routes>
+
+      {/* 4. Premium Floating Glassmorphism Dock (Bottom Center) */}
+      <FloatingDock />
+      
     </div>
   );
 }
