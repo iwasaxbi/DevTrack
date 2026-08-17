@@ -8,8 +8,8 @@ import DashboardGrid from './components/DashboardGrid';
 import Footer from './components/Footer';
 import Login from './components/Login';
 import Projects from './components/Projects';
-import Tasks from './components/Tasks';     // Naya Import
-import Commits from './components/Commits'; // Naya Import
+import Tasks from './components/Tasks';
+import Commits from './components/Commits';
 import CustomCursor from './components/CustomCursor';
 import FloatingDock from './components/FloatingDock';
 
@@ -22,13 +22,14 @@ function App() {
       <CustomCursor />
       <Preloader onLoaded={() => setIsSiteReady(true)} />
 
+      {/* 🚀 THE FIX 1: Navbar ab animated div ke BAHAR hai taaki 'fixed' position perfectly kaam kare */}
+      <Navbar />
+
       <div 
         className={`transition-all duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)] flex flex-col min-h-screen ${
           isSiteReady ? 'translate-y-0 opacity-100' : 'translate-y-[10vh] opacity-0'
         }`}
       >
-        <Navbar />
-        
         <div className="flex-grow">
           <Routes>
             <Route 
@@ -42,7 +43,16 @@ function App() {
                 </>
               } 
             />
-            <Route path="/login" element={<div className="flex items-center justify-center min-h-[80vh] px-4"><Login /></div>} />
+            
+            <Route 
+              path="/login" 
+              element={
+                <div className="flex items-center justify-center min-h-screen pt-32 pb-20 px-4">
+                  <Login />
+                </div>
+              } 
+            />
+            
             <Route path="/projects" element={<Projects />} />
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/commits" element={<Commits />} />
