@@ -12,17 +12,40 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // ==========================================
-  // GOOGLE LOGIN HANDLER (Triggered by button)
+  // GOOGLE LOGIN HANDLER (Backend Connected)
   // ==========================================
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log("Google Access Token:", tokenResponse);
-      toast.success("Google Pop-up Worked! 🚀", { position: "bottom-right", theme: "dark" });
-      // TODO: Send this token to backend in the next phase
+      setIsLoading(true);
+      try {
+        // Token ko backend par bhej rahe hain validation ke liye
+        const response = await axios.post('http://localhost:5000/api/auth/google', {
+          accessToken: tokenResponse.access_token,
+        });
+
+        // Backend se aane wala success message
+        toast.success(response.data.message, {
+          position: "bottom-right",
+          theme: "dark",
+        });
+
+        // Token ko browser ki local storage mein save karna
+        if (response.data.token) {
+          localStorage.setItem('devtrack_token', response.data.token);
+        }
+      } catch (error) {
+        const errorMsg = error.response?.data?.message || "Google Authentication Failed on Server!";
+        toast.error(errorMsg, {
+          position: "bottom-right",
+          theme: "dark",
+        });
+      } finally {
+        setIsLoading(false);
+      }
     },
     onError: (error) => {
       console.log("Google Login Failed", error);
-      toast.error("Google Login Failed", { position: "bottom-right", theme: "dark" });
+      toast.error("Google Login Pop-up Closed or Failed", { position: "bottom-right", theme: "dark" });
     }
   });
 
@@ -81,7 +104,8 @@ const Login = () => {
       <button 
         type="button" 
         onClick={() => handleGoogleLogin()}
-        className="w-full py-3 px-6 border border-[#222222] hover:border-[#555555] flex items-center justify-center space-x-3 transition-all duration-300 group cursor-none mb-4"
+        disabled={isLoading}
+        className="w-full py-3 px-6 border border-[#222222] hover:border-[#555555] flex items-center justify-center space-x-3 transition-all duration-300 group cursor-none mb-4 disabled:opacity-50"
       >
         <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white group-hover:scale-110 transition-transform">
           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -90,7 +114,7 @@ const Login = () => {
           <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
         </svg>
         <span className="text-[10px] font-mono tracking-[0.1em] text-[#A3A3A3] group-hover:text-white transition-colors">
-          CONTINUE WITH GOOGLE
+          {isLoading ? 'PROCESSING...' : 'CONTINUE WITH GOOGLE'}
         </span>
       </button>
 
