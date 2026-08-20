@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGoogleLogin } from '@react-oauth/google'; 
+import { useNavigate } from 'react-router-dom'; // 🚀 1. REDIRECT HOOK IMPORT KIYA
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -11,27 +12,31 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate(); // 🚀 2. NAVIGATE KO INITIALIZE KIYA
+
   // ==========================================
-  // GOOGLE LOGIN HANDLER (Backend Connected)
+  // GOOGLE LOGIN HANDLER 
   // ==========================================
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       setIsLoading(true);
       try {
-        // Token ko backend par bhej rahe hain validation ke liye
         const response = await axios.post('http://localhost:5000/api/auth/google', {
           accessToken: tokenResponse.access_token,
         });
 
-        // Backend se aane wala success message
         toast.success(response.data.message, {
           position: "bottom-right",
           theme: "dark",
         });
 
-        // Token ko browser ki local storage mein save karna
         if (response.data.token) {
           localStorage.setItem('devtrack_token', response.data.token);
+          
+          // 🚀 3. PREMIUM REDIRECT WITH 1 SECOND DELAY
+          setTimeout(() => {
+            navigate('/dashboard');
+          }, 1000); 
         }
       } catch (error) {
         const errorMsg = error.response?.data?.message || "Google Authentication Failed on Server!";
@@ -69,6 +74,11 @@ const Login = () => {
 
       if (response.data.token) {
         localStorage.setItem('devtrack_token', response.data.token);
+        
+        // 🚀 4. PREMIUM REDIRECT WITH 1 SECOND DELAY
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1000);
       }
     } catch (error) {
       const errorMsg = error.response?.data?.message || "Something went wrong!";
@@ -100,7 +110,6 @@ const Login = () => {
         </p>
       </div>
 
-      {/* 🟢 GOOGLE LOGIN BUTTON */}
       <button 
         type="button" 
         onClick={() => handleGoogleLogin()}

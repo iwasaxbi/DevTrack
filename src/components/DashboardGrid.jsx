@@ -5,33 +5,96 @@ const DashboardGrid = () => {
   const navigate = useNavigate();
 
   const cards = [
-    { title: "Projects", status: "Active Right Now", path: "/projects" },
-    { title: "Tasks", status: "Needs Attention", path: "/tasks" },
-    { title: "Commits", status: "Pushed This Week", path: "/commits" },
+    { 
+      title: "Projects", 
+      status: "Active Right Now", 
+      path: "/projects",
+      metric: "12",
+      spanClass: "md:col-span-2 md:row-span-2",
+      description: "Manage your ongoing development projects, track milestones, and ship faster to production."
+    },
+    { 
+      title: "Tasks", 
+      status: "Needs Attention", 
+      path: "/tasks",
+      metric: "05",
+      spanClass: "md:col-span-1 md:row-span-1",
+      description: "Pending bug fixes and feature requests."
+    },
+    { 
+      title: "Commits", 
+      status: "Pushed This Week", 
+      path: "/commits",
+      metric: "34",
+      spanClass: "md:col-span-1 md:row-span-1",
+      description: "Recent code integration and deployments."
+    },
   ];
 
   return (
-    <div className="w-full bg-black py-20 px-6 select-none">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-        {cards.map((card, index) => (
-          <div 
-            key={index}
-            onClick={() => navigate(card.path)}
-            className="group relative border border-[#222222] bg-[#0a0a0a] p-8 cursor-none transition-all duration-500 hover:border-[#444444] hover:bg-[#111111]"
-          >
-            <p className="text-[10px] uppercase tracking-[0.2em] text-[#555555] mb-4 group-hover:text-white transition-colors">
-              {card.status}
+    <div className="w-full h-full flex flex-col justify-center items-center select-none pt-10">
+      <div className="max-w-7xl mx-auto w-full">
+        
+        {/* ========================================== */}
+        {/* WORKSPACE HEADER */}
+        {/* ========================================== */}
+        <div className="mb-10 animate-[fadeIn_0.5s_ease-out]">
+          <h1 className="text-5xl md:text-7xl font-bold text-white uppercase tracking-tighter mb-3">
+            Workspace
+          </h1>
+          <div className="flex items-center space-x-4">
+            <div className="h-px w-12 bg-[#333333]"></div>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-[#777777] font-mono">
+              Overview & Analytics
             </p>
-            <h2 className="text-3xl font-bold text-white uppercase tracking-tight">
-              {card.title}
-            </h2>
-            
-            {/* Small arrow icon for premium feel */}
-            <div className="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span className="text-white text-xl">→</span>
-            </div>
           </div>
-        ))}
+        </div>
+
+        {/* ========================================== */}
+        {/* FIXED PREMIUM BENTO GRID */}
+        {/* ========================================== */}
+        <div className="grid grid-cols-1 md:grid-cols-3 auto-rows-[300px] gap-6">
+          {cards.map((card, index) => (
+            <div 
+              key={index}
+              onClick={() => navigate(card.path)}
+              className={`group relative border border-[#222222] bg-[#0a0a0a] p-8 flex flex-col justify-between overflow-hidden cursor-none transition-all duration-700 hover:border-[#555555] hover:bg-[#111111] ${card.spanClass}`}
+            >
+              {/* Subtle background glow effect on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#ffffff03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-0"></div>
+
+              {/* TRUE WATERMARK (Absolute Position - Layout safe) */}
+              <div className="absolute -bottom-4 -left-2 z-0 pointer-events-none select-none">
+                <span className="text-[120px] md:text-[140px] leading-none font-bold text-[#111111] group-hover:text-[#181818] transition-colors tracking-tighter">
+                  {card.metric}
+                </span>
+              </div>
+
+              {/* Top Section */}
+              <div className="relative z-10">
+                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#555555] mb-2 group-hover:text-[#888888] transition-colors">
+                  {card.status}
+                </p>
+                <h2 className="text-3xl md:text-5xl font-bold text-white uppercase tracking-tight">
+                  {card.title}
+                </h2>
+                <p className="text-[#555555] text-sm mt-4 max-w-[80%] leading-relaxed group-hover:text-[#999999] transition-colors">
+                  {card.description}
+                </p>
+              </div>
+              
+              {/* BOTTOM SECTION (Arrow - Perfectly aligned right) */}
+              <div className="relative z-10 flex-1 flex items-end justify-end mt-4">
+                <div className="w-14 h-14 rounded-full border border-[#333333] flex items-center justify-center group-hover:border-white transition-all duration-500 transform group-hover:translate-x-2 group-hover:-translate-y-2 group-hover:bg-white group-hover:text-black text-white">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </div>
+              </div>
+
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom'; // 🚀 'Navigate' import kiya redirect ke liye
 import Preloader from './components/Preloader';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -13,6 +13,21 @@ import Commits from './components/Commits';
 import CustomCursor from './components/CustomCursor';
 import FloatingDock from './components/FloatingDock';
 
+// ==========================================
+// 🚀 PROTECTED ROUTE WRAPPER (Security)
+// ==========================================
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem('devtrack_token');
+  
+  // Agar browser mein token nahi hai, toh user ko wapas Login par bhej do
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  // Agar token hai, toh jo component manga hai wo dikha do
+  return children;
+};
+
 function App() {
   const [isSiteReady, setIsSiteReady] = useState(false);
 
@@ -22,7 +37,7 @@ function App() {
       <CustomCursor />
       <Preloader onLoaded={() => setIsSiteReady(true)} />
 
-      {/* 🚀 THE FIX 1: Navbar ab animated div ke BAHAR hai taaki 'fixed' position perfectly kaam kare */}
+      {/* Navbar ab animated div ke BAHAR hai taaki 'fixed' position perfectly kaam kare */}
       <Navbar />
 
       <div 
@@ -52,7 +67,22 @@ function App() {
                 </div>
               } 
             />
+
+            {/* ========================================== */}
+            {/* 🚀 NEW: SECURE DASHBOARD ROUTE */}
+            {/* ========================================== */}
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <div className="pt-32 pb-20 px-4 min-h-screen">
+                    <DashboardGrid />
+                  </div>
+                </ProtectedRoute>
+              } 
+            />
             
+            {/* Note: Inko bhi future mein ProtectedRoute se wrap kar sakte ho */}
             <Route path="/projects" element={<Projects />} />
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/commits" element={<Commits />} />
